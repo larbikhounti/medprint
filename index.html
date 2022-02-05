@@ -38,21 +38,53 @@
         </a>
       </div>
     </nav>
-    <div class="container mt-5" style="background-color: #F6F6F9;">
+    <div class="container mt-5">
         <div class="row">
           <div class="col-lg-6">
             <div class="column">
-            <div>
-              <h4 class="h4 text-uppercase p-2">design your product</h4>
+            <div class="border-bottom-1-dark " style="background-color:#F2F2F2;">
+              <h4 class="h4 text-uppercase p-2">product Design</h4>
             </div>
-              
-              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addText" aria-expanded="false" aria-controls="collapseExample">
-                Add Text
-              </button>
-              <div class="collapse mt-5 pt-5" id="addText">
+            <div class="border-bottom-1-dark mt-2">
+              <p class=" text-uppercase  fw-bolder">Design Your Product</p>
+              <p class=" text-uppercase  text-grey">Max file size of 50MB</p>
+            </div>
+              <div class="col">
+                <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#addText" aria-expanded="false" aria-controls="collapseExample">
+                  Add Text
+                </button>
+                <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#addText" aria-expanded="false" aria-controls="collapseExample">
+                  Add Image
+                </button>
+              </div>
+             
+              <div class="collapse mt-3" id="addText">
                 <div class="card card-body">
-                  Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label fw-bold">write your text</label>
+                    <textarea class="form-control" id="Textarea" rows="3"></textarea>
+                  </div>
+                   <div class="mb-3 d-flex  ">
+                    <div>
+                      <label for="exampleColorInput" class="form-label ">Text Color</label>
+                      <input type="color" class="form-control form-control-color" id="ColorInput" value="#563d7c" title="Choose your color"> 
+                    </div>
+                    <div>
+                      <label for="fonts-c" class="form-label ">font Family</label>
+                      <select class="form-select" id="fonts-c" aria-label="Default select example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                    </div>
+                    
+                   
+                   </div>
+                   <div class="mb-3">
+                    <button onclick="addText()" class="btn btn-dark">Insert Text </button>
+                  </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -81,17 +113,7 @@
         canvas.left = 106;
 
 
-        // text
-        var text = new fabric.IText('#juntos', {
-          fontFamily: 'Arial',
-          left: 0,
-          top: 0,
-          fontSize: 20,
-          fill: '#ffffff',
-          textAlign: 'center',
-            
-        });
-          canvas.add(text);
+       
 
         fabric.Image.fromURL('logo3.png', function(oImg) {
           oImg.scale(0.1)
@@ -104,128 +126,22 @@
 
 
     <script>
-      /*
-      let myparent = document.querySelector("#-costmise");
-    // konva.js
-     let second = document.querySelector('.second');
-    var stage = new Konva.Stage({
-      container: '-costmise',
-      width: 245,
-      height: 383
-    });
-    // add layer
-    var layer = new Konva.Layer();
-    var myimage = new Konva.Layer();
-    stage.add(layer)
-    stage.add(myimage)
-
-     // function to calculate crop values from source image, its visible size and a crop strategy
-     function getCrop(image, size, clipPosition = 'center-middle') {
-        const width = size.width;
-        const height = size.height;
-        const aspectRatio = width / height;
-
-        let newWidth;
-        let newHeight;
-
-        const imageRatio = image.width / image.height;
-
-        if (aspectRatio >= imageRatio) {
-          newWidth = image.width;
-          newHeight = image.width / aspectRatio;
-        } else {
-          newWidth = image.height * aspectRatio;
-          newHeight = image.height;
-        }
-
-        let x =  (image.width - newWidth) / 2;
-        let y = (image.height - newHeight) / 2;
-        return {
-          cropX: x,
-          cropY: y,
-          cropWidth: newWidth,
-          cropHeight: newHeight,
-        };
-      }
-
-           // function to apply crop
-      function applyCrop(pos) {
-        const img = myimage.findOne('.image');
-        img.setAttr('lastCropUsed', pos);
-        const crop = getCrop(
-          img.image(),
-          { width: img.width(), height: img.height() },
-          pos
-        );
-        img.setAttrs(crop);
-      }
-      Konva.Image.fromURL(
-        './yoga.svg',
-        (img) => {
-          img.setAttrs({
-            width: 500,
-            height: 500,
-            x: 0,
-            y: 10,
-            name: 'image',
-            draggable: true,
-            crossOrigin: 'anonymous',
-            
-            
-          }
-          );
-         
-         
-          myimage.add(img);
-          // apply default left-top crop
-          applyCrop('center-middle');
-
-          img.on('dblclick', () => {
-            const tr = new Konva.Transformer({
-            nodes: [img],
-            keepRatio: true,
-            boundBoxFunc: (oldBox, newBox) => {
-              if (newBox.width < 10 || newBox.height < 10) {
-                return oldBox;
-              }
-              return newBox;
-            },
-          });
-
-          myimage.add(tr);
+      function addText(){
+        var text = document.getElementById('Textarea').value;
+        var color = document.getElementById('ColorInput').value;
         
-          });
-          
-          stage.on('click', () => {
-            console.log('dblclick');
-            if(myimage.findOne('Transformer') !== undefined){
-              myimage.findOne('Transformer').destroy();
-              myimage.draw();
-            }
-          });
-        
-          
-
-          img.on('transform', () => {
-            // reset scale on transform
-            img.setAttrs({
-              scaleX: 1,
-              scaleY: 1,
-              width: img.width() * img.scaleX(),
-              height: img.height() * img.scaleY(),
-            });
-            applyCrop(img.getAttr('lastCropUsed'));
-          });
-        }
-      );
-     
-      document.querySelector('#clip').onchange = (e) => {
-        applyCrop(e.target.value);
-      };
-
-      
-
-*/
+        var text = new fabric.IText(text, {
+          fontFamily: "Arial",
+          left: 0,
+          top: 0,
+          fontSize: 20,
+          fill: color,
+          textAlign: 'center',
+          fillColor: color,
+            
+        });
+          canvas.add(text);
+      }
 
     </script>
 
