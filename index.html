@@ -34,7 +34,7 @@
           <div class="col-lg-6"  style="position: relative;">
          
             <img style="border: 1px solid black;position:absolute;" width="756"  height="756" class="t-shirt " src="https://d3vvxc53hv5hl7.cloudfront.net/unisex_tees/product_template_nl_triblend_tee_front.png" alt="" srcset="">
-            <div id="-costmise"  style="border: 3px dotted black;position:absolute;" >
+            <div id="-costmise"  style="border: 1px dotted grey;position:absolute;" >
 
             </div>
           </div>
@@ -56,6 +56,7 @@
 
 
     <script>
+      let myparent = document.querySelector("#-costmise");
     // konva.js
      let second = document.querySelector('.second');
     var stage = new Konva.Stage({
@@ -65,27 +66,116 @@
     });
     // add layer
     var layer = new Konva.Layer();
-    // add text
-    var text = new Konva.Text({
-      x: 0,
-      y: 50,
-      text: 'Hello World',
-      fontSize: 20,
-      fontFamily: 'Calibri',
-      fill: 'green',
-      width: stage.getWidth(),
-      align: 'center',
-      
-      id: 'text',
-      draggable: true
-      
-    });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-
-    // add the shape to the layer
-    layer.add(text);
-    // add the layer to the stage
+  
     stage.add(layer)
+
+
+     // function to calculate crop values from source image, its visible size and a crop strategy
+     function getCrop(image, size, clipPosition = 'center-middle') {
+        const width = size.width;
+        const height = size.height;
+        const aspectRatio = width / height;
+
+        let newWidth;
+        let newHeight;
+
+        const imageRatio = image.width / image.height;
+
+        if (aspectRatio >= imageRatio) {
+          newWidth = image.width;
+          newHeight = image.width / aspectRatio;
+        } else {
+          newWidth = image.height * aspectRatio;
+          newHeight = image.height;
+        }
+
+        let x =  (image.width - newWidth) / 2;
+        let y = (image.height - newHeight) / 2;
+        return {
+          cropX: x,
+          cropY: y,
+          cropWidth: newWidth,
+          cropHeight: newHeight,
+        };
+      }
+
+           // function to apply crop
+      function applyCrop(pos) {
+        const img = layer.findOne('.image');
+        img.setAttr('lastCropUsed', pos);
+        const crop = getCrop(
+          img.image(),
+          { width: img.width(), height: img.height() },
+          pos
+        );
+        img.setAttrs(crop);
+      }
+      Konva.Image.fromURL(
+        './logo.png',
+        (img) => {
+          img.setAttrs({
+            width: 300,
+            height: 100,
+            x: 80,
+            y: 100,
+            name: 'image',
+            draggable: true,
+            crossOrigin: 'anonymous',
+            
+          }
+          );
+         
+         
+          layer.add(img);
+          // apply default left-top crop
+          applyCrop('center-middle');
+
+          img.on('dblclick', () => {
+            const tr = new Konva.Transformer({
+            nodes: [img],
+            keepRatio: true,
+            boundBoxFunc: (oldBox, newBox) => {
+              if (newBox.width < 10 || newBox.height < 10) {
+                return oldBox;
+              }
+              return newBox;
+            },
+          });
+
+          layer.add(tr);
+        
+          });
+          
+          stage.on('click', () => {
+            console.log('dblclick');
+            if(layer.findOne('Transformer') !== undefined){
+              layer.findOne('Transformer').destroy();
+              layer.draw();
+            }
+          });
+        
+          
+
+          img.on('transform', () => {
+            // reset scale on transform
+            img.setAttrs({
+              scaleX: 1,
+              scaleY: 1,
+              width: img.width() * img.scaleX(),
+              height: img.height() * img.scaleY(),
+            });
+            applyCrop(img.getAttr('lastCropUsed'));
+          });
+        }
+      );
+     
+      document.querySelector('#clip').onchange = (e) => {
+        applyCrop(e.target.value);
+      };
+
+      
+
+
 
     </script>
 
