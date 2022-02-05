@@ -53,11 +53,22 @@
                 <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#addText" aria-expanded="false" aria-controls="collapseExample">
                   Add Text
                 </button>
-                <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#addText" aria-expanded="false" aria-controls="collapseExample">
+                <button class="btn btn-dark"  type="button" data-bs-target="#addImage" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseExample">
                   Add Image
                 </button>
               </div>
-             
+              <div class="collapse mt-3" id="addImage">
+                <div class="card card-body">
+                  <div>
+                    <label for="formFileLg" class="form-label">Large file input example</label>
+                    <input class="form-control form-control-lg" id="myimage" type="file">
+                  </div>
+                   </div>
+                   <div class="mb-3">
+                    <button onclick="addImage()" class="btn btn-dark">Insert Image </button>
+                  </div>
+                  
+              </div>
               <div class="collapse mt-3" id="addText">
                 <div class="card card-body">
                   <div class="mb-3">
@@ -141,6 +152,20 @@
             
         });
           canvas.add(text);
+      }
+      function addImage(){
+        var file = document.getElementById('myimage').files[0];
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = e.target.result;
+          console.log("fff");
+          fabric.Image.fromURL(data, function(img) {
+           
+            img.scale(0.1);
+            canvas.add(img);
+          });
+        };
       }
 
     </script>
