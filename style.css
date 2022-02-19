@@ -1,0 +1,35 @@
+.sizes{
+    display: none;
+    
+}
+.sizeslabel{
+    font-size: 1.3em;
+    color: #fff;
+    background-color: #000;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* sizes clicked */
+.sizes:checked + .sizeslabel{
+    background-color: rgb(252, 10, 10);
+    
+}
+.colors{
+    display: none;
+   
+}
+.colorslabel{
+    border: 1px solid black;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    padding: 0% !important;
+}
+/* colors clicked */
+.colors:checked + .colorslabel{
+    border: 3px solid rgb(252, 10, 10);
+  
+}
